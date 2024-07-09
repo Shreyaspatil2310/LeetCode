@@ -1,39 +1,37 @@
 class Solution {
- public:
-  bool isPalindrome(ListNode* head) {
-    ListNode* slow = head;
-    ListNode* fast = head;
-
-    while (fast != nullptr && fast->next != nullptr) {
-      slow = slow->next;
-      fast = fast->next->next;
+public:
+    bool isPalindrome(ListNode* head) {
+        ListNode* slow = head;
+        ListNode* fast = head;
+        int len = 0;
+        for (ListNode* curr = head; curr != nullptr; curr = curr->next) {
+            len++;
+        }
+        // Get hold of the mid of the linked list
+        while (fast != nullptr && fast->next != nullptr) {
+            slow = slow->next;
+            fast = fast->next->next;
+        }
+        if (len % 2 != 0) slow = slow->next;
+        ListNode* secondHlfHead = reverse(slow);
+        while (head != nullptr && secondHlfHead != nullptr) {
+            if (head->val != secondHlfHead->val) return false;
+            head = head->next;
+            secondHlfHead = secondHlfHead->next;
+        }
+        return true;
     }
-
-    if (fast != nullptr)
-      slow = slow->next;
-    slow = reverseList(slow);
-
-    while (slow) {
-      if (slow->val != head->val)
-        return false;
-      slow = slow->next;
-      head = head->next;
+    
+private:
+    ListNode* reverse(ListNode* head) {
+        ListNode* curr = head;
+        ListNode* prev = nullptr;
+        while (curr != nullptr) {
+            ListNode* nextNode = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = nextNode;
+        }
+        return prev;
     }
-
-    return true;
-  }
-
- private:
-  ListNode* reverseList(ListNode* head) {
-    ListNode* prev = nullptr;
-
-    while (head) {
-      ListNode* next = head->next;
-      head->next = prev;
-      prev = head;
-      head = next;
-    }
-
-    return prev;
-  }
 };
